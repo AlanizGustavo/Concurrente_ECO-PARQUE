@@ -1,4 +1,5 @@
 import Actividades.AdministradorTour;
+import Actividades.Delfines;
 import Actividades.Faro;
 import Actividades.Parque;
 import Actividades.Restaurante;
@@ -19,18 +20,20 @@ public class Main {
         AdministradorTour adminTour = new AdministradorTour();
         Snorkel snorkel = new Snorkel(10);
         Faro faro = new Faro(10);
+        Delfines delfines = new Delfines();
 
         for (int i = 0; i < CANT_RESTAURANTES; i++) {
             restaurantes[i] = new Restaurante(10);
         }
 
-        for (int i = 0; i < 5; i++) {
-            new Thread(new Visitante(parque, adminTour, restaurantes, shop, snorkel, faro), "VISITANTE " + i).start();
+        for (int i = 0; i < 1000; i++) {
+            new Thread(new Visitante(parque, adminTour, restaurantes, shop, snorkel, faro, delfines), "VISITANTE " + i)
+                    .start();
         }
 
         new Thread(new RelojEstacionamiento(adminTour), "RELOJ ESTACIONAMIENTO ").start();
 
-        new Thread(new RelojParque(parque), "RELOJ PARQUE").start();
+        new Thread(new RelojParque(parque, delfines), "RELOJ PARQUE").start();
 
         new Thread(new AsistenteSnorkel(snorkel), "Asistente Snorkel 1 ").start();
         new Thread(new AsistenteSnorkel(snorkel), "Asistente Snorkel 2 ").start();

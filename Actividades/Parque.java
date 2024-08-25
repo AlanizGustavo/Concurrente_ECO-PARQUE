@@ -67,4 +67,8 @@ public class Parque {
         mutexHora.release();
         return puedeJugar;
     }
+
+    public int getHoraActual() {
+        return this.horaActual;
+    }
 }

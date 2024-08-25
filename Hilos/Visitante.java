@@ -3,6 +3,7 @@ package Hilos;
 import java.util.Random;
 
 import Actividades.AdministradorTour;
+import Actividades.Delfines;
 import Actividades.Faro;
 import Actividades.Parque;
 import Actividades.Restaurante;
@@ -14,6 +15,7 @@ public class Visitante implements Runnable {
     private boolean isInTour;
     private boolean almuerzoPendiente = true;
     private boolean meriendaPendiente = true;
+    private int turnoDelfines;
 
     private Parque parque;
     private AdministradorTour adminTour;
@@ -21,6 +23,7 @@ public class Visitante implements Runnable {
     private Shop shop;
     private Snorkel snorkel;
     private Faro faro;
+    private Delfines delfines;
 
     private Random Random = new Random();
 
@@ -30,7 +33,8 @@ public class Visitante implements Runnable {
             Restaurante[] restaurantes,
             Shop shop,
             Snorkel snorkel,
-            Faro faro) {
+            Faro faro,
+            Delfines delfines) {
 
         this.isInTour = getNumeroRandom(2) % 2 == 0 ? true : false;
         this.parque = parque;
@@ -42,40 +46,44 @@ public class Visitante implements Runnable {
         this.shop = shop;
         this.snorkel = snorkel;
         this.faro = faro;
+        this.delfines = delfines;
     }
 
     private void comenzarActividades() {
         int actividadesARealizar = this.getNumeroRandom(3);
         while (parque.puedeJugar()) {
-            switch (actividadesARealizar) {
-                case 1:
-                    if (this.almuerzoPendiente) {
-                        System.out.println(Thread.currentThread().getName() + " Decidio almorzar");
-                        this.almorzar();
-                        this.almuerzoPendiente = false;
-                    } else if (this.meriendaPendiente) {
-                        System.out.println(Thread.currentThread().getName() + " Decidio merendar");
-                        this.merendar();
-                        this.meriendaPendiente = false;
-                    }
-                    break;
-                case 2:
-                    System.out.println(
-                            Thread.currentThread().getName() + " Decidio que ira a la actividad Snorkel Ilimitado");
-                    this.snorkel();
-                    break;
-                case 3:
-                    System.out.println(Thread.currentThread().getName() + " Decidio ir a la actividad Faro-Mirador");
-                    this.faroMirador();
-                    break;
-                case 4:
-                    System.out.println(Thread.currentThread().getName() + " Decidio nadar con delfines");
-                    this.delfines();
-                    break;
-                case 5:
-                    System.out.println(Thread.currentThread().getName() + " Decidio que ira a la carrera de Gomones");
-                    this.gomones();
-                    break;
+            if (this.turnoDelfines > 0 && this.turnoDelfines == parque.getHoraActual()) {
+                System.out.println(Thread.currentThread().getName() + " Decidio nadar con delfines");
+                this.delfines();
+            } else {
+                switch (actividadesARealizar) {
+                    case 1:
+                        if (this.almuerzoPendiente) {
+                            System.out.println(Thread.currentThread().getName() + " Decidio almorzar");
+                            this.almorzar();
+                            this.almuerzoPendiente = false;
+                        } else if (this.meriendaPendiente) {
+                            System.out.println(Thread.currentThread().getName() + " Decidio merendar");
+                            this.merendar();
+                            this.meriendaPendiente = false;
+                        }
+                        break;
+                    case 2:
+                        System.out.println(
+                                Thread.currentThread().getName() + " Decidio que ira a la actividad Snorkel Ilimitado");
+                        this.snorkel();
+                        break;
+                    case 3:
+                        System.out
+                                .println(Thread.currentThread().getName() + " Decidio ir a la actividad Faro-Mirador");
+                        this.faroMirador();
+                        break;
+                    case 4:
+                        System.out
+                                .println(Thread.currentThread().getName() + " Decidio que ira a la carrera de Gomones");
+                        this.gomones();
+                        break;
+                }
             }
             actividadesARealizar = this.getNumeroRandom(3);
         }
@@ -114,7 +122,7 @@ public class Visitante implements Runnable {
     }
 
     private void delfines() {
-
+        this.delfines.nadarConDelfines();
     }
 
     private void faroMirador() {
@@ -166,6 +174,7 @@ public class Visitante implements Runnable {
         parque.obtenerPulsera();
         boolean puedePasar = parque.entrarAlParque();
         if (puedePasar) {
+            this.turnoDelfines = this.delfines.reservarLugar();
             empezarRecorrido();
         }
     }

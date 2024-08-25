@@ -3,13 +3,13 @@ package Hilos;
 import Actividades.Delfines;
 import Actividades.Parque;
 
-public class RelojParque implements Runnable {
-    private Parque parque;
+public class RelojDelfines implements Runnable {
     private Delfines delfines;
+    private Parque parque;
 
-    public RelojParque(Parque parque, Delfines delfines) {
-        this.parque = parque;
+    public RelojDelfines(Delfines delfines, Parque parque) {
         this.delfines = delfines;
+        this.parque = parque;
     }
 
     @Override
@@ -17,10 +17,7 @@ public class RelojParque implements Runnable {
         while (true) {
             try {
                 Thread.sleep(5000);
-                this.parque.pasarHora();
-                if (parque.getHoraActual() > 12) {
-                    new Thread(new RelojDelfines(delfines, parque), "RELOJ DELFINES").start();
-                }
+                delfines.resetearBarrera(parque.getHoraActual());
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
