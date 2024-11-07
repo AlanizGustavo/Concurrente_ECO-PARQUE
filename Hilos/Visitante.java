@@ -5,11 +5,13 @@ import java.util.Random;
 import Actividades.AdministradorTour;
 import Actividades.Delfines;
 import Actividades.Faro;
+import Actividades.Gomones;
 import Actividades.Parque;
 import Actividades.Restaurante;
 import Actividades.Shop;
 import Actividades.Snorkel;
 import util.Tobogan;
+import util.Tren;
 
 public class Visitante implements Runnable {
     private boolean isInTour;
@@ -24,6 +26,8 @@ public class Visitante implements Runnable {
     private Snorkel snorkel;
     private Faro faro;
     private Delfines delfines;
+    private Tren tren;
+    private Gomones gomones;
 
     private Random Random = new Random();
 
@@ -34,7 +38,9 @@ public class Visitante implements Runnable {
             Shop shop,
             Snorkel snorkel,
             Faro faro,
-            Delfines delfines) {
+            Delfines delfines,
+            Tren tren,
+            Gomones gomones) {
 
         this.isInTour = getNumeroRandom(2) % 2 == 0 ? true : false;
         this.parque = parque;
@@ -47,6 +53,8 @@ public class Visitante implements Runnable {
         this.snorkel = snorkel;
         this.faro = faro;
         this.delfines = delfines;
+        this.tren = tren;
+        this.gomones = gomones;
     }
 
     private void comenzarActividades() {
@@ -85,7 +93,7 @@ public class Visitante implements Runnable {
                         break;
                 }
             }
-            actividadesARealizar = this.getNumeroRandom(3);
+            actividadesARealizar = this.getNumeroRandom(4);
         }
     }
 
@@ -134,7 +142,38 @@ public class Visitante implements Runnable {
     }
 
     private void gomones() {
+        if (this.getNumeroRandom(2) == 1) {
+            System.out.println(
+                    Thread.currentThread().getName() + ": Decidio ir hasta el inicio de la carrera de gomones en Tren");
+            tren.subirAltren();
+            tren.bajarDelTren();
+        } else {
+            System.out.println(
+                    Thread.currentThread().getName() + ": Decidio ir hasta la actividad de gomones en bicicleta");
+            this.simularTiempo(2000);
+        }
+        System.out.println(Thread.currentThread().getName() + ": Llego al inicio de la actividad de gomones");
 
+        int nroBolso = Random.nextInt(2);
+        if (nroBolso == 0) {
+            this.simularTiempo(1500);
+            System.out.println(Thread.currentThread().getName()
+                    + ": Dejo su bolso con pertenencias");
+        }
+
+        Random r = new Random();
+        if (r.nextInt(2) % 2 == 0)
+            this.gomones.liberarGomon(1);
+        else
+            this.gomones.liberarGomon(2);
+
+        gomones.bajarse();
+
+        if (nroBolso == 0) {
+            this.simularTiempo(1500);
+            System.out.println(Thread.currentThread().getName() + ": Paso a buscar su bolso con sus pertenencias");
+        }
+        System.out.println(Thread.currentThread().getName() + ": Se fue de la actividad carrera de gomones");
     }
 
     private void snorkel() {
