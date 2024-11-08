@@ -7,14 +7,13 @@ import java.util.logging.Logger;
 public class Parque {
     private Semaphore molinetes;
     private Semaphore mutexHora;
-    private int cantMolinetes = 20;
 
     private final int HORA_ENTRADA = 9;
-    private final int FIN_HORA_ENTRADA = 17;
-    private final int HORA_SALIDA = 18;
+    private final int FIN_HORA_ENTRADA = 17; // HORA MAXIMA EN QUE UN VISITANTE PUEDE ENTRAR AL PARQUE.
+    private final int HORA_SALIDA = 18; // LOS VISITANTES QUE ESTAN ADENTRO PUEDEN EMPEZAR UNA ACTIVIDAD HASTA ESA HORA.
     private int horaActual = HORA_ENTRADA;
 
-    public Parque() {
+    public Parque(int cantMolinetes) {
         this.mutexHora = new Semaphore(1);
         this.molinetes = new Semaphore(cantMolinetes, true);
     }

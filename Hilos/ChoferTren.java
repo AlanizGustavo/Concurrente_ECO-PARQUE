@@ -25,7 +25,7 @@ public class ChoferTren implements Runnable {
 
     private void simulaViaje() {
         try {
-            Thread.sleep(2000);
+            Thread.sleep(1000);
         } catch (Exception e) {
             Logger.getLogger(ChoferTren.class.getName()).log(Level.SEVERE, null, e);
         }
