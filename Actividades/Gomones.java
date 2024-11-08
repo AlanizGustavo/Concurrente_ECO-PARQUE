@@ -11,7 +11,7 @@ import Hilos.FinDelJuegoRestart;
 public class Gomones {
 
     private int cantGomonesIndividuales, cantGomonesDobles;
-    private int maxCantGomonesJuntos;
+    private int cantGomonesJuntos;
     private Semaphore gomonesIndividuales, gomonesDobles;
     private Semaphore mutex; // Para exclusion mutua
     private Semaphore ganador; // Para determinar un ganador
@@ -26,10 +26,10 @@ public class Gomones {
 
     private Thread restartCarrera;
 
-    public Gomones(int cantGomonesIndivuales, int cantGomonesDobles, int maxCantGomonesJuntos) {
+    public Gomones(int cantGomonesIndivuales, int cantGomonesDobles, int cantGomonesJuntos) {
         this.cantGomonesIndividuales = cantGomonesIndivuales;
         this.cantGomonesDobles = cantGomonesDobles;
-        this.maxCantGomonesJuntos = maxCantGomonesJuntos;
+        this.cantGomonesJuntos = cantGomonesJuntos;
 
         gomonesIndividuales = new Semaphore(this.cantGomonesIndividuales);
         gomonesDobles = new Semaphore(this.cantGomonesDobles * 2);
@@ -38,12 +38,12 @@ public class Gomones {
         ganador = new Semaphore(1);
         mandarSimple = new Semaphore(0);
         mandarDoble = new Semaphore(0);
-        esperarInicioDeCarrera = new Semaphore(maxCantGomonesJuntos);
+        esperarInicioDeCarrera = new Semaphore(cantGomonesJuntos);
 
         restartCarrera = new Thread(new FinDelJuegoRestart(this));
 
-        barrera = new CyclicBarrier(maxCantGomonesJuntos);
-        meta = new CyclicBarrier(maxCantGomonesJuntos, restartCarrera);
+        barrera = new CyclicBarrier(cantGomonesJuntos);
+        meta = new CyclicBarrier(cantGomonesJuntos, restartCarrera);
     }
 
     public void liberarGomon(int tipo) {
@@ -121,7 +121,7 @@ public class Gomones {
             cantGomonesIndActual = 0;
             cantGomonesDoblesActual = 0;
             ganador.release();
-            esperarInicioDeCarrera.release(maxCantGomonesJuntos);
+            esperarInicioDeCarrera.release(cantGomonesJuntos);
             mutex.release();
         } catch (InterruptedException ex) {
             Logger.getLogger(Gomones.class.getName()).log(Level.SEVERE, null, ex);

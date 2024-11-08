@@ -16,7 +16,7 @@ public class RelojParque implements Runnable {
     public void run() {
         while (true) {
             try {
-                Thread.sleep(5000);
+                Thread.sleep(8000);
                 this.parque.pasarHora();
                 if (parque.getHoraActual() > 12) {
                     new Thread(new RelojDelfines(delfines, parque), "RELOJ DELFINES").start();

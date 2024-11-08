@@ -150,13 +150,12 @@ public class Visitante implements Runnable {
         } else {
             System.out.println(
                     Thread.currentThread().getName() + ": Decidio ir hasta la actividad de gomones en bicicleta");
-            this.simularTiempo(2000);
+            this.simularTiempo(1000);
         }
         System.out.println(Thread.currentThread().getName() + ": Llego al inicio de la actividad de gomones");
 
         int nroBolso = Random.nextInt(2);
         if (nroBolso == 0) {
-            this.simularTiempo(1500);
             System.out.println(Thread.currentThread().getName()
                     + ": Dejo su bolso con pertenencias");
         }
@@ -170,7 +169,6 @@ public class Visitante implements Runnable {
         gomones.bajarse();
 
         if (nroBolso == 0) {
-            this.simularTiempo(1500);
             System.out.println(Thread.currentThread().getName() + ": Paso a buscar su bolso con sus pertenencias");
         }
         System.out.println(Thread.currentThread().getName() + ": Se fue de la actividad carrera de gomones");
